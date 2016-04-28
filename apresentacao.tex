@@ -223,9 +223,7 @@
 				\end{lstlisting}
 				No exemplo acima temos a primeira linha com a importação do unicode\_literals para Python 2.7 utilizar o formato de texto unicode.
 	
-				Na segunda linha temos a importação do models do Django mais especificamente o db que é responsável pela ligação do Django com o banco de dados.
-				
-				Na terceira linha tem o modelo movimentacao que é uma classe filha de models.Model.
+				Na segunda linha temos a importação do models do Django mais especificamente o db que é responsável pela ligação do Django com o banco de dados.								
 			\end{frame}
 			\begin{frame}[fragile]{Django Models}{Modelo categoria}
 				O modelo categoria no arquivo models.py:
@@ -235,6 +233,8 @@
 				class Categoria(models.Model):
 				    nome = models.CharField(max_length=255)
 				\end{lstlisting}
+				Na terceira linha tem o modelo movimentacao que é uma classe filha de models.Model.
+				
 				Na quarta linha tem um atributo chamado nome no qual foi definido um tipo texto que necessariamente terá o tamanho máximo de 255 caracteres.
 			\end{frame}
 			\begin{frame}[fragile]{Django Models}{Modelo transação}

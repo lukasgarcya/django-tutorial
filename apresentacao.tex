@@ -1,0 +1,459 @@
+\documentclass[12pt]{beamer}
+%\usetheme{Berkeley}
+\usetheme{Hannover}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{listings}
+
+\author{Lucas Garcia de Araújo Martins}
+\title{Criando site em Django}
+
+\setbeamercovered{transparent}
+
+\setbeamertemplate{navigation symbols}{}
+
+\lstset{
+	language=Python,
+	basicstyle=\ttfamily,
+	otherkeywords={self},             
+	keywordstyle=\ttfamily\color{blue!90!black},
+	keywords=[2]{True,False},
+	keywords=[3]{ttk},
+	keywordstyle={[2]\ttfamily\color{yellow!80!orange}},
+	keywordstyle={[3]\ttfamily\color{red!80!orange}},
+	emph={MyClass,__init__},          
+	emphstyle=\ttfamily\color{red!80!black},    
+	stringstyle=\color{green!80!black},
+	showstringspaces=false,
+	breaklines=true           
+}
+
+\begin{document}
+	\frame{\titlepage}
+	\frame{\tableofcontents}
+	\section{Instalação}	
+		\subsection{Python}
+			\begin{frame}
+				Por padrão o Python já vem instalado em Linux e Mac OS. Não aconselho tentar usar em Windows.
+			\end{frame}
+		\subsection{Pip}
+			\begin{frame}{Gerenciador de pacote para Python}
+				\framesubtitle{pip}
+				A instalação de pacotes no Python podem ser realizadas através de um gerenciador chamado pip. Este funciona na linha de comando.			
+				
+				Através do pip podemos instalar as bibliotecas que iremos usar no nosso projeto.
+				
+				Quando vai instalar qualquer pacote em Python é interessante que verifique a existência no pip para facilitar a instalação.
+			\end{frame}
+			\begin{frame}{Como fazer a instalação do pip}
+				A instalação do pip pode ser feita de acordo com o site oficial \url{https://pip.pypa.io/en/stable/installing/}.			
+	
+				Então vamos fazer a instalação no próximo slide.
+			\end{frame}
+			\begin{frame}[fragile]{Instalando o pip}
+				Para instalar o pip basta fazermos o download neste link \url{https://bootstrap.pypa.io/get-pip.py} de acordo com o site oficial de instalação \url{https://pip.pypa.io/en/stable/installing/}.
+				Este arquivo nada mais é do que um comandos em Python que irá baixar a última versão do pip e instalar para nós.
+				Depois de baixar o arquivo basta apenas executar o comando com permissão administrativa. No Linux precisa ser root ou seu usuário ser um sudoers(colocar sudo antes do comando como no segundo exemplo abaixo):
+				\begin{lstlisting}
+				# python get-pip.py
+				$ sudo python get-pip.py			
+				\end{lstlisting}
+			\end{frame}
+		\subsection{VirtualEnvWrapper}
+			\begin{frame}[fragile]{Instalando o VirtualEnvWrapper}
+				De acordo com o site oficial \url{http://virtualenvwrapper.readthedocs.org/en/latest/install.html} a instalação consiste em utilizar o pip instalado anteriormente com o seguinte comnado.
+				\begin{lstlisting}
+				# pip install virtualenvwrapper
+				\end{lstlisting}
+				A vantagem do virtualenvwrapper é que este cria um ambiente separado para instalação de bibliotecas no seu projeto então pode-se ter vários projetos com vários ambientes com bibliotecas diferentes do Python ou Django.
+			\end{frame}
+			\begin{frame}[fragile]{Instalando o VirtualEnvWrapper}{Configurando o usuário}
+				Para que os comandos do VirtualEnvWrapper possam funcionar basta que seja adicionado no .bashrc ou .profile os seguintes comandos:
+				\begin{lstlisting}
+				export WORKON_HOME=$HOME/.virtualenvs
+				export PROJECT_HOME=$HOME/Devel
+				export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
+				source /usr/bin/virtualenvwrapper_lazy.sh
+				\end{lstlisting}
+				Com isto já podemos criar nossos ambientes separados ou isolados.
+			\end{frame}
+	\section{Iniciando no Django}
+		\subsection{Preparando o ambiente}
+			\begin{frame}[fragile]{Instalando o Django}
+				Para começar a trabalhar com o Django é bom ter um ambiente isolado utilizando o virtualenvwrapper.
+				\begin{lstlisting}
+				$ mkvirtualenv flisol
+				$ pip install django
+				\end{lstlisting}
+				No primeiro comando será criado um um ambiente chamado flisol onde as bibliotecas instaladas serão utilizadas somente neste ambiente enquanto estiver ativo.
+				
+				No segundo comando fazemos a instalação do Django neste ambiente isolado para não conflitar com outras versões de Django.
+			\end{frame}
+		\subsection{Criando projeto inicial}
+			\begin{frame}{Comando de administração do Django}
+				O Django tem o comando django-admin ou django-admin.py que auxilia nas tarefas comuns ou administrativas dentro de um projeto. Acessar a base de dados, atualizar a estrutura do banco de dados, criar uma nova app, criar um novo projeto, são exemplos de tarefas que podemos fazer com este comando.
+			\end{frame}
+			\begin{frame}[fragile]{Criando um projeto}
+				Então vamos fazer nosso projeto? A criação de um projeto no Django começa com o comando:
+				\begin{lstlisting}
+				django-admin.py startproject financeiro
+				\end{lstlisting}
+				Entendendo o comando acima:
+				\begin{itemize}
+					\item O termo django-admin.py é o próprio comando do Django;
+					\item startproject indica que esta sendo criado um novo projeto;
+					\item financeiro é o nome do projeto criado.
+				\end{itemize}
+				Com isto será criado um diretório ou pasta chamado financeiro com os arquivos mínimos de um projeto Django.
+			\end{frame}
+			\begin{frame}{Entendendo os arquivos do Django}
+				Dentro do diretório financeiro vai ter os seguintes arquivos e diretórios:
+				\begin{itemize}
+					\item manage.py é um arquivo que o Django usa para comandos tal como o django-admin.py. Sua diferença do django.admin.py é que apenas funciona no projeto atual;
+					\item O diretório financeiro que contem informações sobre o site. Este costuma ser o nome do projeto em si.				
+				\end{itemize}
+			\end{frame}
+			\begin{frame}{Entendendo os arquivos do Django}{Diretório financeiro ou nome do projeto}
+				Arquivos dentro do diretório do projeto.
+				\begin{itemize}				
+					\item \_\_init\_\_.py indica que este diretório tem um módulo Python;
+					\item settings.py o arquivo com configuração do seu projeto. Neste tem informações do Banco de dados, suas apps que estão instaladas, o fuso-horário, idioma do site.
+					\item urls.py Arquivo que contem as urls para o seu site.
+					\item wsgi.py Arquivo de configuração para executar um servidor web.
+				\end{itemize}
+			\end{frame}
+			\begin{frame}{Realizando as configurações básicas no projeto}
+				Agora vamos realizar as configurações básicas para adequar o Django a nossa realidade. Primeiro vamos abrir o arquivo settings.py que esta dentro do diretório financeiro.			
+			\end{frame}
+			\begin{frame}[fragile]{Realizando as configurações básicas no projeto}{Linguagem}
+				Por padrão o Django vem configurado para funcionar na linguagem inglês do Estados Unidos. Então agora vamos colocar em Português alterando a variável LANGUAGE\_CODE para 'pt-br'.
+				\begin{lstlisting}
+				LANGUAGE_CODE = 'pt-br'
+				\end{lstlisting}
+			\end{frame}
+			\begin{frame}[fragile]{Realizando as configurações básicas no projeto}{Fuso horário}
+				Também precisamos colocar o horário do Django para o utilizado no Brasil. Neste caso devemos colocar 'America/Sao\_Paulo' na variável TIME\_ZONE.
+				\begin{lstlisting}
+				TIME_ZONE = 'America/Sao_Paulo'
+				\end{lstlisting}
+			\end{frame}
+			\begin{frame}[fragile]{Banco de Dados}
+				O Banco de Dados já vem configurado por padrão para usar o SQLite. Mas pode-se usar outros Banco de Dados Relacionais tais como o PostgreSQL, MySQL, etc.
+				\begin{lstlisting}
+				DATABASES = {
+				    'default': {
+				    'ENGINE': 'django.db.backends.sqlite3',
+				    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+				    }
+				}
+				\end{lstlisting}
+				No caso do SQLite não precisa de definir usuário e senha então fica apenas a Engine que é qual tipo de Banco de Dados está usando e o name é o arquivo que será salvo o Banco de Dados.
+			\end{frame}
+			\begin{frame}[fragile]{Executando o projeto}
+				Agora sim podemos executar o projeto. No Django já existe por padrão um servidor de desenvolvimento. Para utilizar este servidor basta utilizar o comando:
+				\begin{lstlisting}
+				$ python manage.py runserver
+				\end{lstlisting}
+				Este irá executar um servidor web na máquina local na porta 8000. Então agora basta abrirmos um navegador e acessar o link \url{http://localhost:8000}.
+				
+				O Servidor que acabamos de executar é exclusivo para o desenvolvimento testar o funcionamento do site e não pode ser usado em produção.
+			\end{frame}
+			\begin{frame}{Executando o projeto}{Funcionamento pleno}
+				Já temos nosso projeto inicial em pleno funcionamento. Porém falta colocarmos algumas páginas para poder ser um site de verdade.
+			\end{frame}
+	\section{Criando a app de Movimentação}
+		\begin{frame}{Criando meu primeiro app}
+			Agora iremos começar a fazer nossa aplicação. O Django trabalha com o conceito de app que nada mais é do que módulos no projeto.
+		\end{frame}
+		\subsection{Criando uma Transação}
+			\begin{frame}[fragile]{Criando o módulo}
+				O primeiro módulo ou app será a movimentação financeira realizada. Então para criar este app devemos digitar o comando:
+				\begin{lstlisting}
+				$ python manage.py startapp movimentacao
+				\end{lstlisting}
+				Com este comando o Django irá criar os arquivos necessários para termos uma app em nosso projeto.
+			\end{frame}
+			\begin{frame}[fragile]{Instalando a app no projeto}
+				Mesmo após criar nossa app ainda é necessário que seja informado no settings.py que esta app irá ser utilizada no projeto. Para isto basta adicionar a app na tupla INSTALLED\_APPS como segue abaixo:
+				\begin{lstlisting}
+				INSTALLED_APPS = [
+				    'django.contrib.admin',
+				    'django.contrib.auth',
+				    'django.contrib.contenttypes',
+				    'django.contrib.sessions',
+				    'django.contrib.messages',
+				    'django.contrib.staticfiles',
+				    'movimentacao',
+				]
+				\end{lstlisting}
+			\end{frame}
+			\begin{frame}{Django Models}
+				O Django trabalha com a ideia de modelos que representam os dados. O modelo é como uma tabela no banco de dados. Na verdade o Django cria uma tabela no banco de dados para cada modelo a princípio.
+			\end{frame}
+			\begin{frame}{Django Models}{models.py}
+				O Django utiliza o arquivo models.py de cada aplicação para mapear os modelos e criar as tabelas. Cada modelo é uma classe Python que contem os atributos da entidade que estamos criando e alguns métodos que o Django utiliza para trabalhar com o modelo tal como a representação legível do modelo. Também tem a classe interna Meta que tem informações do modelo tal como a ordem que os campos serão listados numa consulta padrão, o nome do modelo legível tanto singular como plural.
+			\end{frame}
+			\begin{frame}{Django Models}{Atributo do modelo}
+				Cada modelo tem alguns atributos que o Django mapeia para uma tabela do Banco de Dados. Então como no Banco de Dados cada atributo tem um tipo \(inteiro, texto, data\) no Django também tem esta diferenciação. No Django tem o atributo tipo CharField para texto simples, IntegerField para número inteiro, DecimalField para número decimal ou flutuante, FileField para arquivos, ImageField para imagem, etc.
+			\end{frame}
+			\begin{frame}{Criando os modelos}
+				Em nossa app movimentacao iremos ter 2 modelos:
+				\begin{itemize}
+					\item Categoria
+					\item Transação
+				\end{itemize}
+			\end{frame}
+			\begin{frame}{Criando os modelos}{Categoria}
+				A categoria na movimentação é constituída de um nome. O nome pode ser alimentação, transporte, telefone, etc. 
+				%Então vemos que uma categoria é um texto simples. No Django Models para texto simples usamos o tipo de campo CharField. O tipo CharField por padrão exige que seja definido o tamanho máximo de caracteres terá este campo, isto acontece porque no Banco de Dados este tipo precisa ter definido o tamanho.
+			\end{frame}
+			\begin{frame}{Criando os modelos}{Transação}
+				A transação na movimentação é constituída da data e hora que aconteceu o evento, uma descrição, a categoria e o valor. 
+				
+			\end{frame}
+			\begin{frame}[fragile]{Django Models}{Exemplo de modelo}
+				O modelo categoria no arquivo models.py:
+				\begin{lstlisting}
+				from __future__ import unicode_literals			
+				from django.db import models
+				class Categoria(models.Model):
+				    nome = models.CharField(max_length=255)	
+				\end{lstlisting}
+				No exemplo acima temos a primeira linha com a importação do unicode\_literals para Python 2.7 utilizar o formato de texto unicode.
+	
+				Na segunda linha temos a importação do models do Django mais especificamente o db que é responsável pela ligação do Django com o banco de dados.
+				
+				Na terceira linha tem o modelo movimentacao que é uma classe filha de models.Model.
+			\end{frame}
+			\begin{frame}[fragile]{Django Models}{Modelo categoria}
+				O modelo categoria no arquivo models.py:
+				\begin{lstlisting}
+				from __future__ import unicode_literals			
+				from django.db import models
+				class Categoria(models.Model):
+				    nome = models.CharField(max_length=255)
+				\end{lstlisting}
+				Na quarta linha tem um atributo chamado nome no qual foi definido um tipo texto que necessariamente terá o tamanho máximo de 255 caracteres.
+			\end{frame}
+			\begin{frame}[fragile]{Django Models}{Modelo transação}
+				O modelo transação no arquivo models.py:
+				\begin{lstlisting}
+				...
+				class Transacao(models.Model):				
+				    data_hora = models.DateTimeField()
+				    descricao = models.CharField(max_length=255)
+				    categoria = models.ForeignKey(Categoria)
+				    valor = models.DecimalField(max_digits=11, decimal_places=2)				
+				\end{lstlisting}				
+			\end{frame}
+			
+			\begin{frame}{Django Models}{Modelo transação}
+				A data e hora foi representada pelo tipo DateTimeField. A descrição fica com um CharField tendo o tamanho máximo de 255. A categoria é uma chave estrangeira para a Categoria que no Django é um ForeignKey. O valor é um DecimalField que precisa ter o máximo 11 digitos que iremos usar e também como é valor monetário será aceito até 2 digitos decimais para os centavos.		
+				
+				Com isto já é suficiente para o Django criar nosso banco de dados e as tabelas destes modelos.
+			\end{frame}
+		\subsection{Criando a migração}	
+			\begin{frame}{A migração do banco de dados no Django}
+				No Django utilizamos uma forma de controlar a evolução, criação ou as alterações no banco de dados chamada de migrations. Isto garante que a estrutura do banco de dados durante o decorrer do desenvolvimento tenha a estrutura evoluída e no momento de colocar o projeto em produção teremos um banco de dados consistente. É feito de forma automática e em raros casos que é preciso fazer alguma alteração manual.
+			\end{frame}
+			\begin{frame}[fragile]{Fazendo a migração do banco de dados}
+				Para que o Django saiba que queremos atualizar a estrutura do modelo no banco de dados de uma app é necessário executar o comando makemigrations informando a app a ser atualizada. Nisto no Django será criado arquivos que tem informações da estrutura que queremos ter. Então vamos marcar a evolução da app movimentacao:
+				\begin{lstlisting}
+				$ python manage.py makemigrations movimentacao
+				\end{lstlisting}
+			\end{frame}
+			\begin{frame}[fragile]{Fazendo a migração do banco de dados}{Criando o banco de dados}
+				Apos o makemigrations é necessário aplicar as alterações no banco de dados e isto é feito através do migrate. Então agora vamos utilizar o migrate e ver que ele já vai criar o banco de dados e vai ter a estrutura do modelo Transacao e Categoria.
+				\begin{lstlisting}
+				$ python manage.py migrate
+				\end{lstlisting}
+			\end{frame}
+			\begin{frame}[fragile]{Visualizando o banco de dados}
+				Já temos o banco de dados criado. Como foi utilizado o SQLite podemos usar o seguinte comando para visualizar o Banco de Dados:
+				\begin{lstlisting}
+				$ python manage.py dbshell
+				\end{lstlisting}
+				Agora para visualizar as tabelas que existem basta utilizar:
+				\begin{lstlisting}
+				sqlite> .tables
+				\end{lstlisting} 
+			\end{frame}
+		\subsection{Django Contrib Admin}
+			\begin{frame}{Django Admin}
+				No Django já existe uma forma simples e rápida de ter a criação, a visualização, a edição e a remoção de um model com a utilização da app admin. Esta app já tem a parte administrativa pronta para ser utilizada com os modelos.
+			\end{frame}
+			\begin{frame}[fragile]{Acessando o Django Admin}
+				O admin tem a url padrão configurada em 'admin/'. Então para acessar o site administrativo basta que o servidor esteja executando (python manage.py runserver). Então vamos no navegador acessar a url \url{http://localhost:8000/admin/}.				
+				Irá solicitar o usuário e senha que podemos criar com o comando:
+				\begin{lstlisting}
+				python manage.py createsuperuser
+				\end{lstlisting}
+				Irá solicitar o username ou nome do usuário que por padrão podemos colocar admin. O e-mail address podemos deixar em branco. O password pode ser abc123456.				
+				
+				Agora é só voltar no site e entrar com este username e password.
+				
+				Por padrão já temos a administração do usuário e grupo e permissão que no Django já vem pronto.
+			\end{frame}
+			\begin{frame}[fragile]{Conhecendo o admin}
+				Vamos criar em Usuário e veremos uma lista de usuários que estão cadastrados e neste caso tem apenas o admin. Para editar o usuário basta clicar no link do nome do admin e irá aparecer a edição. Nesta pode-se alterar o nome do usuário, informações pessoais, as permissões e datas importantes.
+			\end{frame}
+			\begin{frame}{As permissões padrão do admin}
+				O admin já tem algumas permissões padrão para cada modelo que é gerenciado. São 3 permissões:
+				\begin{itemize}
+					\item add\_nomemodel Criar registro do modelo;
+					\item change\_nomemodel Visualiza lista de registros e edita registro;
+					\item delete\_nomemodel Apaga registro.
+				\end{itemize}
+				Cada modelo criado já tem estas permissões que podem ser associadas ao usuário ou a um grupo. Um usuário pode ter vários grupos e consequentemente ter estas permissões.
+			\end{frame}
+			\begin{frame}[fragile]{Criando a administração do modelo Categoria}
+				Para criar a administração do modelo Categoria basta editar o arquivo admin.py da app movimentacao. No caso para usar o básico do Admin basta usar o seguinte código:
+				\begin{lstlisting}
+				from django.contrib import admin
+				from movimentacao.models import *
+				
+				# Register your models here.
+				admin.site.register(Categoria)
+				\end{lstlisting}
+				Com isto já pode fazer o administrar a categoria e para isto vamos abrir novamente o site admin \url{http://localhost:8000/admin/} e vamos adicionar um categoria. Vamos clicar em Adicionar na linha de categoria e criar uma categoria com o nome Alimentação. Após a criação já vai voltar para lista de categorias cadastradas. Porém não iremos ver o nome da categoria e sim Categoria object.
+			\end{frame}
+			\begin{frame}[fragile]{Nome legível para modelo}
+				Como foi visto o Django utiliza por padrão o nome da classe modelo acompanhada de object para o nome do registro. Para ter outro nome mais legível podemos utilizar o método do python \_\_unicode\_\_ que retorna um nome legível para um objeto:
+				\begin{lstlisting}
+				class Categoria(models.Model):
+				    nome = models.CharField(max_length=255)
+				    					
+				    def __unicode__(self):
+					        return self.nome
+				\end{lstlisting}
+				Agora podemos atualizar a url \url{http://localhost:8000/admin/movimentacao/categoria} que veremos o nome da categoria cadastrada.
+			\end{frame}
+			\begin{frame}[fragile]{Fazendo busca pelo nome da Categoria}
+				Agora vamos colocar um campo de pesquisa para buscar pelo nome da categoria. Para isto basta editar o admin.py da app movimentacao. Neste caso já vamos utilizar uma classe personalizada do admin para ter esta opção. Primeiro cria-se uma classe filha de admin.ModelAdmin e no admin.site.register(Modelo) fica definido admin.site.register(Modelo, ModeloAdmin) para informar ao admin que tem um classe com as informações de gerenciamento do modelo. 
+			\end{frame}
+			\begin{frame}[fragile]{Classe personalizada para o admin da Categoria}
+				Então o arquivo admin.py vai ficar assim:
+				\begin{lstlisting}
+				from django.contrib import admin
+				from movimentacao.models import *
+				
+				class CategoriaAdmin(admin.ModelAdmin):
+				    search_fields = ['nome']
+				
+				# Register your models here.
+				admin.site.register(Categoria, CategoriaAdmin)
+				\end{lstlisting}
+				Na classe personalizada basta informar uma lista de campos que serão utilizados na pesquisa.
+			\end{frame}
+			\begin{frame}{Admin da Categoria}
+				Agora podemos voltar ao site \url{http://localhost:8000/admin/movimentacao/categoria/} e visualizar o campo de pesquisa.
+				
+				Com isto já temos a administração da Categoria pronta.
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}
+				Para criar a administração da transação podemos fazer o mesmo que foi feito com a categoria no qual adiciona uma lista de campos para pesquisa:
+					\begin{lstlisting}
+					...
+					class TransacaoAdmin(admin.ModelAdmin):
+					    search_fields = ['descricao', 'categoria__nome']					
+						
+					admin.site.register(Transacao, TransacaoAdmin)
+					\end{lstlisting}
+				
+			\end{frame}
+			\begin{frame}{Criando o admin para o modelo Transação}
+				Então voltamos ao site administrativo \url{http://localhost:8000/admin/}e vemos a Transação para ser gerenciada. Vamos criar uma transação com a data e horário atual com a descrição de Arroz categoria alimentação e valor 11,00. Na pesquisa temos uma diferença que é a categoria no qual pode-se pesquisar por um campo da categoria e isto é permitido usando o thunder(\_\_). Isto permite acessar campos de um uma tabela estrangeira.
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Nome em português do modelo transação}
+				O Django admin cria um nome para cada modelo na sua página porém vemos que a Transação ficou com o nome sem acentuação e o plural errado. Isto corrigimos direto no modelo (models.py). É necessário no início da linha do arquivo models.py adicionar "\# -*- coding: UTF-8 -*-".
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Nome em português do modelo transação}
+				\begin{lstlisting}
+				class Transacao(models.Model):				
+				    ...				    
+				    class Meta:
+				    verbose_name = u'Transação'
+				    verbose_name_plural = u'Transações'
+				\end{lstlisting}
+				No modelo tem o classe interna Meta que tem meta-informações do modelo tais como nome e nome no plural, as permissões, etc. O verbose\_name é para o nome do modelo no singular e o verbose\_name\_plural é para o nome do modelo no plural.			
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Migração}
+				Como foi feito uma alteração no modelo e queremos que esta seja salva na estrutura do banco de dado precisa-se fazer a marcação com:
+				\begin{lstlisting}
+				$ python manage.py makemigrations movimentacao
+				\end{lstlisting}
+				E depois aplicar esta migração no banco com:
+				\begin{lstlisting}
+				$ python manage.py migrate
+				\end{lstlisting}
+				Isto faz necessário devido toda alteração ser gerenciada pelo Django e facilita a vida do programador que não precisa ficar alterando a estrutura do banco.
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Listando campos}
+				Como aconteceu com a Categoria na Transação na \url{http://localhost:8000/admin/movimentacao/transacao/} tem o nome de Transacao Object para cada transação criada. Só que neste caso temos mais de um campo que representa a transação então usar o mesmo artifício da Categoria não seria legal. Mas para isto também tem uma solução simples em uma linha no Django Admin bastando colocar o atributo list\_display na classe TransacaoAdmin tendo uma lista de campos a serem exibidos.
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Listando campos}
+				\begin{lstlisting}
+				...
+				class TransacaoAdmin(admin.ModelAdmin):
+				    search_fields = ['descricao']
+				    list_display = ['data_hora', 'descricao','categoria','valor']
+				...
+				\end{lstlisting}
+				Então temos uma lista com os campos da transação sendo exibido na tela administrativa								
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Nome dos campos sem acentuação}
+				Agora observamos que a descrição da transação está com o nome sem acento e para resolver isto basta voltar no models.py e alterar a declaração deste campo(descricao) para:
+				\begin{lstlisting}
+				class Transacao(models.Model):
+				    ...
+				    descricao = models.CharField(u'Descrição', max_length=255)
+				    ...
+				\end{lstlisting}
+				O primeiro parâmetro de um campo do modelo é sempre o nome que será exibido em formulário ou em telas que tenham este campo.
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Nome específico para a data e hora}
+				Como também fizemos no nome da descrição, pode-se fazer na data e hora para ficar um nome mais legível.
+				\begin{lstlisting}
+					class Transacao(models.Model):
+					    data_hora = models.DateTimeField(u'Data e horário')
+				\end{lstlisting}
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Nome do objeto}
+				Mesmo usando o list\_display o nome do objeto continua Transacao Object no admin e isto pode ser observado quando clica em algum item para editar e aparece no breadcrumb. Então vamos deixar no models.py na classe da Transação o metodo \_\_unicode\_\_ retornando um nome legível.
+				\begin{lstlisting}
+				class Transacao(models.Model):
+				    def __unicode__(self):
+				        return '%s - %s - %s - %s' % (self.data_hora, self.descricao, self.categoria, self.valor)
+				\end{lstlisting}
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Nome do objeto}
+				Nosso retorno tem uma formatação particular que o Python permite no qual informa-se uma string de formatação '\%s - \%s - \%s - \%s' substituindo o \%s por cada item que fica depois de \% dentro da string.
+			\end{frame}
+			\begin{frame}{Criando o admin para o modelo Transação}{Filtro}
+				Vamos criar um filtro para poder escolher apenas visualizar a transação de uma categoria?				
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Filtro}
+				Então basta configurar no admin.py na classe Transacao um atributo list\_filter com os campos que serão os filtros.
+				\begin{lstlisting}
+					class TransacaoAdmin(admin.ModelAdmin):
+					    ...
+					    list_filter = ['categoria', 'data_hora', 'valor']
+				\end{lstlisting}
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Ordenação}
+				Vamos agora adicionar uma nova transação para amanhã referente a um táxi que pegamos para viajar e a categoria é Transporte e foi cobrado 35,00. No caso na própria tela de cadastro de transação pode-se cadastrar uma nova categoria clicando no + ao lado do select de categoria. Isto é uma mão na roda para poder cadastrar um item que esta dentro de outro.
+			\end{frame}
+			\begin{frame}{Criando o admin para o modelo Transação}{Ordenação}
+				Pode-se notar que as datas da transação ficou em ordem que é inserida e num extrato de banco por exemplo fica em ordem temporal. Para resolver temos de definir no model.py na classe Transação a ordem. Isto é feito utilizando ordering como atributo da classe Meta sendo uma lista de campos para ordenar. No nosso caso queremos que seja ordenado pela data\_hora, depois categoria e valor.
+			\end{frame}
+			\begin{frame}[fragile]{Criando o admin para o modelo Transação}{Ordenação}
+				\begin{lstlisting}
+				class Transacao(models.Model):
+				    ...
+				    class Meta:
+				        ordering = ['data_hora', 'categoria', 'valor']					
+				\end{lstlisting}
+			\end{frame}
+\end{document}
